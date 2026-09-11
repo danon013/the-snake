@@ -2,6 +2,8 @@ from random import randint
 
 import pygame
 
+pygame.init()
+
 # Константы для размеров поля и сетки:
 SCREEN_WIDTH, SCREEN_HEIGHT = 640, 480
 GRID_SIZE = 20
@@ -212,7 +214,7 @@ def main():
     столкновение с яблоком, змейки с собой и с камнем.
     """
     # Инициализация PyGame:
-    pygame.init()
+    # pygame.init()
     # Тут нужно создать экземпляры классов.
     apple = Apple()
     stone = Stone()
@@ -244,10 +246,11 @@ def main():
         pygame.display.update()
         clock.tick(10)
 
+    pygame.quit()
+
 
 if __name__ == '__main__':
     main()
-
 
 # Метод draw класса Apple
 # def draw(self):
@@ -293,4 +296,3 @@ if __name__ == '__main__':
 #     if self.next_direction:
 #         self.direction = self.next_direction
 #         self.next_direction = None
-pygame.quit()
