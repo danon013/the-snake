@@ -54,8 +54,10 @@ class GameObject():
         self.position = position or (SCREEN_CENTER_X, SCREEN_CENTER_Y)
         self.body_color = body_color
 
-    def draw_cell(self):
-        rect = pg.Rect(self.position, (GRID_SIZE, GRID_SIZE))
+    def draw_cell(self, position=None):
+        """Повторяющийся код для отрисовки ячейки."""
+        position = position or self.position
+        rect = pg.Rect(position, (GRID_SIZE, GRID_SIZE))
         pg.draw.rect(screen, self.body_color, rect)
         pg.draw.rect(screen, BORDER_COLOR, rect, 1)
 
@@ -153,8 +155,8 @@ class Snake(GameObject):
 
     def draw(self):
         """Отвечает за отрисовку всех сегментов змейки."""
-        for self.position in self.positions[:-1]:
-            self.draw_cell()
+        for position in self.positions[:-1]:
+            self.draw_cell(position)
 
         # Отрисовка головы змейки
         head_rect = pg.Rect(self.get_head_position(), (GRID_SIZE, GRID_SIZE))
