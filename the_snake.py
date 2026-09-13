@@ -50,8 +50,8 @@ clock = pg.time.Clock()
 class GameObject():
     """Базовый класс для всех игровых объектов."""
 
-    def __init__(self, position, body_color):
-        self.position = position or (SCREEN_CENTER_X, SCREEN_CENTER_Y)
+    def __init__(self, body_color=None):
+        self.position = SCREEN_CENTER
         self.body_color = body_color
 
     def draw_cell(self, position):
@@ -77,8 +77,8 @@ class Apple(GameObject):
     Отвечает за появление яблока в рандомном месте и его отрисовку.
     """
 
-    def __init__(self, body_color, occupied_positions=(SCREEN_CENTER,)):
-        super().__init__(position=(0, 0), body_color=body_color)
+    def __init__(self, body_color=None, occupied_positions=(SCREEN_CENTER,)):
+        super().__init__(body_color=body_color)
         self.randomize_position(occupied_positions)
 
     def randomize_position(self, occupied_positions):
@@ -104,8 +104,8 @@ class Snake(GameObject):
     отрисовку змейки на экране.
     """
 
-    def __init__(self, body_color):
-        super().__init__(position=(SCREEN_CENTER), body_color=body_color)
+    def __init__(self, body_color=None):
+        super().__init__(body_color=body_color)
         self.length = 1
         self.positions = [self.position]
         self.direction = RIGHT
