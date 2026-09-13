@@ -50,11 +50,11 @@ clock = pg.time.Clock()
 class GameObject():
     """Базовый класс для всех игровых объектов."""
 
-    def __init__(self, position=None, body_color=None):
+    def __init__(self, position, body_color):
         self.position = position or (SCREEN_CENTER_X, SCREEN_CENTER_Y)
         self.body_color = body_color
 
-    def draw_cell(self, position=None):
+    def draw_cell(self, position):
         """Повторяющийся код для отрисовки ячейки."""
         position = position or self.position
         rect = pg.Rect(position, (GRID_SIZE, GRID_SIZE))
@@ -77,7 +77,7 @@ class Apple(GameObject):
     Отвечает за появление яблока в рандомном месте и его отрисовку.
     """
 
-    def __init__(self, body_color=None, occupied_positions=(SCREEN_CENTER)):
+    def __init__(self, body_color, occupied_positions=(SCREEN_CENTER,)):
         super().__init__(position=(0, 0), body_color=body_color)
         self.randomize_position(occupied_positions)
 
@@ -93,7 +93,7 @@ class Apple(GameObject):
 
     def draw(self):
         """Метод отвечающий за отрисовку яблока."""
-        self.draw_cell()
+        self.draw_cell(self.position)
 
 
 class Snake(GameObject):
@@ -104,7 +104,7 @@ class Snake(GameObject):
     отрисовку змейки на экране.
     """
 
-    def __init__(self, body_color=None):
+    def __init__(self, body_color):
         super().__init__(position=(SCREEN_CENTER), body_color=body_color)
         self.length = 1
         self.positions = [self.position]
@@ -159,9 +159,7 @@ class Snake(GameObject):
             self.draw_cell(position)
 
         # Отрисовка головы змейки
-        head_rect = pg.Rect(self.get_head_position(), (GRID_SIZE, GRID_SIZE))
-        pg.draw.rect(screen, self.body_color, head_rect)
-        pg.draw.rect(screen, BORDER_COLOR, head_rect, 1)
+        self.draw_cell(self.get_head_position())
 
         # Затирание последнего сегмента
         if self.last:
@@ -222,9 +220,15 @@ def main():
                 occupied_positions=(snake.positions, apple.position)
             )
 
-        if snake.get_head_position() in snake.positions[1:]:
+        elif snake.get_head_position() in snake.positions[1:]:
             snake.reset()
             screen.fill(BOARD_BACKGROUND_COLOR)
+            stone.randomize_position(
+                occupied_positions=(snake.positions, apple.position)
+            )
+            apple.randomize_position(
+                occupied_positions=(snake.positions, stone.position)
+            )
 
         snake.draw()
         apple.draw()
